@@ -13,13 +13,12 @@
 ```bash
 git clone git@github.com:Enjoyfffliu/Wallpaper_power_switch.git
 cd Wallpaper_power_switch
-
-# 默认用 WaifuX
 bash install.sh
-
-# 或者指定你自己的动态壁纸 App
-bash install.sh "Dynamic Wallpaper"
 ```
+
+安装脚本会自动扫描 `/Applications` 里的动态壁纸 App，弹出原生对话框让你选 👇
+
+> 支持 WaifuX、Dynamic Wallpaper、Plash、Aerial 等，也可以手动输入
 
 ## 卸载
 
