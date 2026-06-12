@@ -1,11 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "🖥️  Wallpaper Power Switch - 安装"
+# 动态壁纸 App 名，可通过第一个参数指定，默认 WaifuX
+APP_NAME="${1:-WaifuX}"
 
-# 1. 安装脚本
+echo "🖥️  Wallpaper Power Switch - 安装"
+echo "  动态壁纸 App: $APP_NAME"
+
+# 1. 安装脚本（同时替换 App 名）
 mkdir -p "$HOME/.local/bin"
-cp wallpaper-power-switch.sh "$HOME/.local/bin/wallpaper-power-switch.sh"
+sed "s/^WAIFUX_APP=.*/WAIFUX_APP=\"$APP_NAME\"/" wallpaper-power-switch.sh \
+    > "$HOME/.local/bin/wallpaper-power-switch.sh"
 chmod +x "$HOME/.local/bin/wallpaper-power-switch.sh"
 echo "  ✓ 脚本已安装到 ~/.local/bin/"
 

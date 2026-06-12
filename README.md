@@ -11,9 +11,14 @@
 ## 安装
 
 ```bash
-git clone https://github.com/你的用户名/wallpaper-power-switch.git
-cd wallpaper-power-switch
+git clone git@github.com:Enjoyfffliu/Wallpaper_power_switch.git
+cd Wallpaper_power_switch
+
+# 默认用 WaifuX
 bash install.sh
+
+# 或者指定你自己的动态壁纸 App
+bash install.sh "Dynamic Wallpaper"
 ```
 
 ## 卸载
@@ -34,14 +39,7 @@ rm -rf ~/.cache/wallpaper-power-*
 | `WAIFUX_APP` (第11行) | 动态壁纸 App 名称 | `WaifuX` |
 | `StartInterval` (plist第13行) | 检测间隔（秒） | `30` |
 
-### 换成其他动态壁纸 App
-
-```bash
-# 比如换成 Dynamic Wallpaper Engine
-sed -i '' 's/WaifuX/你的App名/' ~/.local/bin/wallpaper-power-switch.sh
-```
-
-修改 plist 间隔后需重新加载：
+修改间隔需编辑 plist 后重新加载：
 
 ```bash
 launchctl unload ~/Library/LaunchAgents/com.flames.wallpaper-power-switch.plist
