@@ -48,4 +48,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
     MACOSX_BUNDLE_ICON_FILE "icon.icns"
     RESOURCE "${CMAKE_SOURCE_DIR}/resources/icon.icns"
+    # 不写死 Homebrew rpath，使用 @executable_path
+    INSTALL_RPATH "@executable_path/../Frameworks"
+    BUILD_RPATH "@executable_path/../Frameworks"
+    BUILD_WITH_INSTALL_RPATH TRUE
+    # 跳过 Homebrew 自动检测的 rpath
+    MACOSX_RPATH OFF
 )
