@@ -85,16 +85,16 @@ PowerMonitor::PowerState PowerMonitor::querySystemState() const {
 
     CFDictionaryRef ps = IOPSGetPowerSourceDescription(
         blob, CFArrayGetValueAtIndex(list, 0));
+
+    PowerState result = AC;
+    if (ps) {
+        CFStringRef state = (CFStringRef)CFDictionaryGetValue(
+            ps, CFSTR(kIOPSPowerSourceStateKey));
+        if (state && CFStringCompare(state, CFSTR(kIOPSACPowerValue), 0) != kCFCompareEqualTo)
+            result = Battery;
+    }
+
     CFRelease(list);
     CFRelease(blob);
-
-    if (!ps) return AC;
-
-    CFStringRef state = (CFStringRef)CFDictionaryGetValue(
-        ps, CFSTR(kIOPSPowerSourceStateKey));
-    if (!state) return AC;
-
-    if (CFStringCompare(state, CFSTR(kIOPSACPowerValue), 0) == kCFCompareEqualTo)
-        return AC;
-    return Battery;
+    return result;
 }
