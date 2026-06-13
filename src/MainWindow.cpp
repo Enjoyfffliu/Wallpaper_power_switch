@@ -16,6 +16,19 @@
 #include <QPixmap>
 #include <QFileInfo>
 #include <QCloseEvent>
+#include <CoreFoundation/CFNotificationCenter.h>
+
+// CFNotification 回调：macOS Dock 点击 / Cmd+Tab 切回时触发
+static void dockActivationCallback(CFNotificationCenterRef, void *observer,
+                                    CFStringRef, const void *,
+                                    CFDictionaryRef) {
+    auto *w = static_cast<QWidget *>(observer);
+    if (w && !w->isVisible()) {
+        w->show();
+        w->raise();
+        w->activateWindow();
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle("Wallpaper Power Switch");
@@ -29,6 +42,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setupUI();
     connectSignals();
     loadSettings();
+
+    // 注册 macOS 原生通知：Dock 点击时重新显示窗口
+    CFNotificationCenterAddObserver(
+        CFNotificationCenterGetLocalCenter(),
+        this,                                // 传递 this 作为 observer
+        &dockActivationCallback,
+        CFSTR("NSApplicationDidBecomeActiveNotification"),
+        nullptr,
+        CFNotificationSuspensionBehaviorDeliverImmediately);
 
     m_powerMonitor->setPollInterval(m_intervalSpin->value());
     m_powerMonitor->start();
@@ -45,11 +67,15 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 bool MainWindow::event(QEvent *e) {
-    // 点 Dock 图标 → 重新显示窗口
-    if (e->type() == QEvent::ApplicationActivate) {
-        show();
-        raise();
-        activateWindow();
+    // 处理各种激活事件：Dock 点击、Cmd+Tab 切回等
+    // QEvent::ApplicationActivate 和 ApplicationStateChange 都试试
+    if (e->type() == QEvent::ApplicationActivate ||
+        e->type() == QEvent::ApplicationStateChange) {
+        if (!isVisible()) {
+            show();
+            raise();
+            activateWindow();
+        }
     }
     return QMainWindow::event(e);
 }
