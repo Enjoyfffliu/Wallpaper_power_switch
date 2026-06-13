@@ -1,0 +1,15 @@
+#include <QApplication>
+#include "MainWindow.h"
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    app.setOrganizationName("com.flames");
+    app.setApplicationName("WallpaperPowerSwitch");
+    app.setQuitOnLastWindowClosed(false);
+
+    MainWindow window;
+    window.show();
+
+    return app.exec();
+}
