@@ -18,6 +18,10 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+    bool event(QEvent *e) override;
+
 private slots:
     void onPowerChanged(int state);
     void onAppRunningChanged(bool running);

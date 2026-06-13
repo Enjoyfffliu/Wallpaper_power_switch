@@ -15,6 +15,7 @@
 #include <QApplication>
 #include <QPixmap>
 #include <QFileInfo>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle("Wallpaper Power Switch");
@@ -36,6 +37,22 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 MainWindow::~MainWindow() {}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    // 点红色 X → 隐藏到后台，不退出
+    hide();
+    event->ignore();
+}
+
+bool MainWindow::event(QEvent *e) {
+    // 点 Dock 图标 → 重新显示窗口
+    if (e->type() == QEvent::ApplicationActivate) {
+        show();
+        raise();
+        activateWindow();
+    }
+    return QMainWindow::event(e);
+}
 
 void MainWindow::setupUI() {
     auto *central = new QWidget;
